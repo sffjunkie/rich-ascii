@@ -54,3 +54,6 @@ ASCII Code Points
 ```
 
 Uses the [rich](https://rich.readthedocs.io/en/latest/) library for the fancy table formattting.
+
+The aliases are taken from the `NameAliases.txt` file provided as part of the Unicode UCD
+and is [© 2020 Unicode®, Inc.](https://www.unicode.org/copyright.html)
