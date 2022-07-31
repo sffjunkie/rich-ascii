@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "rich-ascii"
+version = "0.1.0"
+description = "CLI tool to display the ASCII character code point information as a table."
+authors = ["Simon Kennedy <sffjunkie+code@gmail.com>"]
+
+packages = [
+    { include = "rich_ascii", from = "src" },
+    { include = "rich_ascii/NameAliases.txt", from = "src" },
+]
+
+[tool.poetry.scripts]
+ascii = 'rich_ascii.__main__:run'
+
+[tool.scriv]
+version = "literal: pyproject.toml: tool.poetry.version"
+format = "md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+rich = "^12.5.1"
+click = "^8.1.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
