@@ -2,6 +2,12 @@
 
 `ascii` is small CLI tool to display information on the ASCII characters as a table.
 
+It can be installed from [PyPi](https://pypi.org/project/rich-ascii/) using `pip`, `pipx` or your favourite tool of choice.
+
+```
+pip install rich-ascii
+```
+
 If called with no options it will display the decimal value, hexadecimal value and name
 in 2 sets of columns (0-127 in the first and 128-255 in the second).
 
