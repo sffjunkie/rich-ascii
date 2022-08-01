@@ -68,3 +68,8 @@ Uses the [rich](https://rich.readthedocs.io/en/latest/) library for the fancy ta
 
 The aliases are taken from the `NameAliases.txt` file provided as part of the Unicode UCD
 and is [© 2020 Unicode®, Inc.](https://www.unicode.org/copyright.html)
+
+## PS
+
+The output does look better than it appears on the web. Github mangles it by changing the line height from 1
+and PyPi mangles it even worse.
