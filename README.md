@@ -2,10 +2,11 @@
 
 `ascii` is small CLI tool to display information on the ASCII characters as a table.
 
-If called with no options it will display the decimal, hexadecimal and name
-in 2 sets of columns (0-127 in the first and 128-255 in the second)
+If called with no options it will display the decimal value, hexadecimal value and name
+in 2 sets of columns (0-127 in the first and 128-255 in the second).
 
 ```
+ASCII Code Points
 ┏━━━━━┳━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━┳━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Dec ┃ Hex  ┃ Name                        ┃ Dec ┃ Hex  ┃ Name                                       ┃
 ┡━━━━━╇━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━╇━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
@@ -27,8 +28,7 @@ in 2 sets of columns (0-127 in the first and 128-255 in the second)
 └─────┴──────┴─────────────────────────────┴─────┴──────┴────────────────────────────────────────────┘
 ```
 
-If passed with the flag `--aliases` then the table will be displayed with a row for each character
-including a list of the aliases for the character.
+If passed with the flag `--aliases` then the table will be displayed with a row for each character including a list of its aliases.
 
 ```
 ASCII Code Points
@@ -52,6 +52,17 @@ ASCII Code Points
 │ 255 │ 0xFF │ Latin Small Letter Y With Diaeresis   │                                               │
 └─────┴──────┴───────────────────────────────────────┴───────────────────────────────────────────────┘
 ```
+
+It also supports highlighting a specific item by passing the number to highlight either as a decimal of a hexadecimal number.
+
+You can also control the style of the table with the following options
+
+    --style           = The style of the text
+    --title-style     = The style of the table title
+    --header-style    = The style of the table header
+    --highlight-style = The style of the highlighted row
+
+See the [Rich dcoumentation](https://rich.readthedocs.io/en/stable/style.html) for details on how to specify a style.
 
 Uses the [rich](https://rich.readthedocs.io/en/latest/) library for the fancy table formattting.
 

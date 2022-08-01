@@ -7,6 +7,12 @@ from rich.console import Console
 from rich.table import Table
 
 
+STYLE: str = "white"
+TITLE_STYLE = "green"
+HEADER_STYLE = "blue"
+HIGHLIGHT_STYLE = "on green"
+
+
 class CodePointInfo(NamedTuple):
     code_point: int
     name: str
@@ -65,12 +71,41 @@ def formatted_aliases(aliases: list[str]) -> Iterator[str]:
             yield alias.title()
 
 
-def display_code_points(code_points: list[CodePointInfo], show_aliases: bool = True):
+def code_point_to_int(code_point: str) -> int:
+    try:
+        if code_point.startswith("0x") and len(code_point) in [3, 4]:
+            highlight_cp = int(code_point[2:], 16)
+        else:
+            highlight_cp = int(code_point)
+            if highlight_cp > 255:
+                highlight_cp = -1
+    except ValueError:
+        highlight_cp = -1
+
+    return highlight_cp
+
+
+def display_code_points(
+    code_points: list[CodePointInfo],
+    show_aliases: bool = True,
+    style: str = STYLE,
+    title_style: str = TITLE_STYLE,
+    header_style: str = HEADER_STYLE,
+    highlight_style: str = HIGHLIGHT_STYLE,
+    code_point: str = "",
+):
+    if code_point != "":
+        highlight_cp = code_point_to_int(code_point)
+        highlight = highlight_style
+    else:
+        highlight_cp = -1
+        highlight = ""
+
     table = Table(
         title="ASCII Code Points",
         title_justify="left",
-        title_style="bold green",
-        header_style="blue",
+        title_style=title_style,
+        header_style=header_style,
     )
     if show_aliases:
         table.add_column("Dec")
@@ -79,6 +114,7 @@ def display_code_points(code_points: list[CodePointInfo], show_aliases: bool = T
         table.add_column("Aliases")
 
         for cp in code_points:
+            cp_style = highlight if cp.code_point == highlight_cp else style
             if cp.aliases is not None:
                 aliases = ", ".join(formatted_aliases(cp.aliases))
             else:
@@ -86,8 +122,9 @@ def display_code_points(code_points: list[CodePointInfo], show_aliases: bool = T
             table.add_row(
                 f"{cp.code_point:02d}",
                 f"0x{cp.code_point:02X}",
-                cp.name.title(),
-                aliases,
+                f"{cp.name.title()}",
+                f"{aliases}",
+                style=cp_style,
             )
     else:
         table.add_column("Dec")
@@ -97,13 +134,15 @@ def display_code_points(code_points: list[CodePointInfo], show_aliases: bool = T
         table.add_column("Hex")
         table.add_column("Name")
         for cp1, cp2 in zip(code_points[:128], code_points[128:]):
+            cp1_style = highlight if cp1.code_point == highlight_cp else style
+            cp2_style = highlight if cp2.code_point == highlight_cp else style
             table.add_row(
-                f"{cp1.code_point:02d}",
-                f"0x{cp1.code_point:02X}",
-                cp1.name.title(),
-                f"{cp2.code_point:02d}",
-                f"0x{cp2.code_point:02X}",
-                cp2.name.title(),
+                f"[{cp1_style}]{cp1.code_point:02d}[/]",
+                f"[{cp1_style}]0x{cp1.code_point:02X}[/]",
+                f"[{cp1_style}]{cp1.name.title()}[/]",
+                f"[{cp2_style}]{cp2.code_point:02d}[/]",
+                f"[{cp2_style}]0x{cp2.code_point:02X}[/]",
+                f"[{cp2_style}]{cp2.name.title()}[/]",
             )
 
     console = Console()
@@ -111,10 +150,53 @@ def display_code_points(code_points: list[CodePointInfo], show_aliases: bool = T
 
 
 @click.command()
-@click.option("-a", "--aliases/--no-aliases", default=False)
-def run(aliases: bool):
+@click.option(
+    "--aliases/--no-aliases",
+    default=False,
+    help="Show a column with aliases for the name",
+)
+@click.option(
+    "--style",
+    default=STYLE,
+    metavar="STYLE",
+    help=f'Set the style of the text (default: "{STYLE}")',
+)
+@click.option(
+    "--title-style",
+    default=TITLE_STYLE,
+    metavar="STYLE",
+    help=f'Set the style of the table title (default: "{TITLE_STYLE}")',
+)
+@click.option(
+    "--header-style",
+    default=HEADER_STYLE,
+    metavar="STYLE",
+    help=f'Set the style of the table header (default: "{HEADER_STYLE}")',
+)
+@click.option(
+    "--highlight-style",
+    default=HIGHLIGHT_STYLE,
+    metavar="STYLE",
+    help=f'Set the style of highlighted text (default: "{HIGHLIGHT_STYLE}")',
+)
+@click.argument("code_point", default="")
+def run(
+    aliases: bool,
+    style: str,
+    title_style: str,
+    header_style: str,
+    highlight_style: str,
+    code_point: str,
+):
+    """Display a table of ASCII code point information.
+
+    \b
+    If a CODE_POINT is provided then it will be hightlighted in the output.
+    CODE_POINT can be either a decimal (245) or a hexadecimal (0xF5) string."""
     cp = get_code_points()
-    display_code_points(cp, aliases)
+    display_code_points(
+        cp, aliases, style, title_style, header_style, highlight_style, code_point
+    )
 
 
 run()
