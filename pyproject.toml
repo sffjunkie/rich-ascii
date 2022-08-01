@@ -3,6 +3,8 @@ name = "rich-ascii"
 version = "0.2.0"
 description = "CLI tool to display the ASCII character code point information as a table."
 authors = ["Simon Kennedy <sffjunkie+code@gmail.com>"]
+license = "Apache-2.0"
+readme = "ReadMe.md"
 
 packages = [
     { include = "rich_ascii", from = "src" },
